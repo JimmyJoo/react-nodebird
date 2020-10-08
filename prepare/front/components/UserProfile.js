@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Card, Button } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 
-const UserProfile = () => {
+const UserProfile = ({ setIsLoggedIn }) => {
+  const onLogout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
+
   return (
     <Card
       actions={[
@@ -21,7 +25,7 @@ const UserProfile = () => {
       ]}
     >
       <Card.Meta avatar={<Avatar>JJ</Avatar>} title="Jimmy Joo" />
-      <Button>로그아웃</Button>
+      <Button onClick={onLogout}>로그아웃</Button>
     </Card>
   );
 };
