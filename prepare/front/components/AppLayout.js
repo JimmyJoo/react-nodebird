@@ -7,7 +7,7 @@ import { Menu, Input, Row, Col } from 'antd';
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
 
-const SearchInput = styled(Input.Search)`
+const StSearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 
@@ -27,7 +27,7 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
         <Menu.Item>
-          <SearchInput enterButton></SearchInput>
+          <StSearchInput enterButton="검색" />
         </Menu.Item>
         <Menu.Item>
           <Link href="/signup">
