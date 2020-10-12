@@ -13,7 +13,7 @@ const dummyPost = {
   },
   content: '두 번째 게시글 #더미포스트',
   Images: [],
-  Posts: [],
+  Comments: [],
 };
 
 // initialState
