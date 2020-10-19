@@ -1,8 +1,10 @@
 // actiion types
-const ADD_POST = 'post/ADD_POST';
+export const ADD_POST = 'post/ADD_POST';
+export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'post/ADD_POST_FAILURE';
 
 // action creator
-export const addPost = () => ({ type: ADD_POST });
+export const addPost = (data) => ({ type: ADD_POST, data });
 
 // dummyPost
 const dummyPost = {
