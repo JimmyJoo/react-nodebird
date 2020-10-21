@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
+import { SIGN_UP } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StSignupForm = styled(Form)`
   padding: 10px;
@@ -19,9 +21,12 @@ const StErrorMessage = styled.div`
 `;
 
 const Signup = () => {
-  const [id, onChangeId] = useInput('');
-  const [nickname, onChangeNickname] = useInput('');
-  const [password, onChangePassword] = useInput('');
+  const dispatch = useDispatch();
+  const { signUpLoading, signUpDone } = useSelector((state) => state.user);
+
+  const [email, setEmail, onChangeEmail] = useInput('');
+  const [nickname, setNickname, onChangeNickname] = useInput('');
+  const [password, setPassword, onChangePassword] = useInput('');
 
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -50,7 +55,19 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
+    dispatch({
+      type: SIGN_UP,
+      data: { email, password, nickname },
+    });
   }, [password, passwordCheck, term]);
+
+  useEffect(() => {
+    if (signUpDone) {
+      setEmail('');
+      setPassword('');
+      setNickname('');
+    }
+  }, [signUpDone]);
 
   return (
     <AppLayout>
@@ -59,14 +76,15 @@ const Signup = () => {
       </Head>
       <StSignupForm onFinish={onSubmit}>
         <StFormItemWrapper>
-          <label>아이디</label>
+          <label>이메일</label>
           <br />
           <Input
-            id="signup-id"
-            name="signup-id"
-            value={id}
+            id="signup-email"
+            name="signup-email"
+            value={email}
+            type="email"
             required
-            onChange={onChangeId}
+            onChange={onChangeEmail}
           />
         </StFormItemWrapper>
         <StFormItemWrapper>
@@ -114,7 +132,7 @@ const Signup = () => {
           {termError && <StErrorMessage>동의하기를 눌러주세요.</StErrorMessage>}
         </StFormItemWrapper>
         <StFormItemWrapper>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>
             가입하기
           </Button>
         </StFormItemWrapper>
