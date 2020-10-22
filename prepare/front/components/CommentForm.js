@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useInput from '../hooks/useInput';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import useInput from '../hooks/useInput';
 import { addComment } from '../reducers/post';
 
 const CommentForm = ({ post }) => {

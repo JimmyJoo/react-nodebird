@@ -13,29 +13,27 @@ const StLoadMore = styled.div`
   margin: 10px 0;
 `;
 
-const FollowList = ({ header, data }) => {
-  return (
-    <StList
-      grid={{ gutter: 4, xs: 2, md: 3 }}
-      header={<div>{header}</div>}
-      size="small"
-      loadMore={
-        <StLoadMore>
-          <Button>더 보기</Button>
-        </StLoadMore>
-      }
-      bordered
-      dataSource={data}
-      renderItem={({ nickname }) => (
-        <List.Item style={{ marginTop: 20 }}>
-          <Card actions={[<StopOutlined key="stop" />]}>
-            <Card.Meta description={nickname} />
-          </Card>
-        </List.Item>
-      )}
-    ></StList>
-  );
-};
+const FollowList = ({ header, data }) => (
+  <StList
+    grid={{ gutter: 4, xs: 2, md: 3 }}
+    header={<div>{header}</div>}
+    size="small"
+    loadMore={
+      <StLoadMore>
+        <Button>더 보기</Button>
+      </StLoadMore>
+    }
+    bordered
+    dataSource={data}
+    renderItem={({ nickname }) => (
+      <List.Item style={{ marginTop: 20 }}>
+        <Card actions={[<StopOutlined key="stop" />]}>
+          <Card.Meta description={nickname} />
+        </Card>
+      </List.Item>
+    )}
+  />
+);
 
 FollowList.propTypes = {
   header: PropTypes.string.isRequired,

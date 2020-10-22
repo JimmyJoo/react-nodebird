@@ -1,5 +1,5 @@
-import { all, fork, takeLatest, delay, call, put } from 'redux-saga/effects';
-import { addPostApi } from '../api/postApi';
+import { all, fork, takeLatest, delay, put } from 'redux-saga/effects';
+// import { addPostApi } from '../api/postApi';
 import { ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE } from '../reducers/post';
 
 function* addPost(action) {

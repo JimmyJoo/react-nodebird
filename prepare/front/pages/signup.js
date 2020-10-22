@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 import { SIGN_UP } from '../reducers/user';
-import { useDispatch, useSelector } from 'react-redux';
 
 const StSignupForm = styled(Form)`
   padding: 10px;

@@ -1,5 +1,5 @@
-import { all, fork, takeLatest, delay, call, put } from 'redux-saga/effects';
-import { logInApi, logOutApi, signUpApi } from '../api/userApi';
+import { all, fork, takeLatest, delay, put } from 'redux-saga/effects';
+// import { logInApi, logOutApi, signUpApi } from '../api/userApi';
 import {
   LOG_IN,
   LOG_IN_SUCCESS,
