@@ -11,6 +11,18 @@ export const SIGN_UP = 'user/SIGN_UP';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
+export const CHANGE_NICKNAME = 'user/CHANGE_NICKNAME';
+export const CHANGE_NICKNAME_SUCCESS = 'user/CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'user/CHANGE_NICKNAME_FAILURE';
+
+export const FOLLOW = 'user/FOLLOW';
+export const FOLLOW_SUCCESS = 'user/FOLLOW_SUCCESS';
+export const FOLLOW_FAILURE = 'user/FOLLOW_FAILURE';
+
+export const UNFOLLOW = 'user/UNFOLLOW';
+export const UNFOLLOW_SUCCESS = 'user/UNFOLLOW_SUCCESS';
+export const UNFOLLOW_FAILURE = 'user/UNFOLLOW_FAILURE';
+
 // action creator
 export const loginAction = (data) => ({ type: LOG_IN, data });
 export const logoutAction = () => ({ type: LOG_OUT });
@@ -26,6 +38,15 @@ const initialState = {
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+  changeNicknameLoading: false,
+  changeNicknameDone: false,
+  changeNicknameError: null,
+  followLoading: false,
+  followDone: false,
+  followError: null,
+  unfollowLoading: false,
+  unfollowDone: false,
+  unfollowError: null,
   isLoggedIn: false,
   me: null,
   signUpData: {},
@@ -34,7 +55,7 @@ const initialState = {
 
 const dummyUser = (data) => ({
   ...data,
-  nickanme: 'Jimmy Joo',
+  nickname: 'Jimmy Joo',
   id: 1,
   Posts: [],
   Followings: [],
@@ -102,6 +123,63 @@ const user = (state = initialState, action) => {
         ...state,
         signUpLoading: false,
         signUpError: action.error,
+      };
+    case CHANGE_NICKNAME:
+      return {
+        ...state,
+        changeNicknameLoading: true,
+        changeNicknameDone: false,
+        changeNicknameError: null,
+      };
+    case CHANGE_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameDone: true,
+      };
+    case CHANGE_NICKNAME_FAILURE:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameError: action.error,
+      };
+    case FOLLOW:
+      return {
+        ...state,
+        followLoading: true,
+        followDone: false,
+        followError: null,
+      };
+    case FOLLOW_SUCCESS:
+      return {
+        ...state,
+        followLoading: false,
+        followDone: true,
+      };
+    case FOLLOW_FAILURE:
+      return {
+        ...state,
+        followLoading: false,
+        followError: action.error,
+      };
+    case UNFOLLOW:
+      return {
+        ...state,
+        unfollowLoading: true,
+        unfollowDone: false,
+        unfollowError: null,
+      };
+    case UNFOLLOW_SUCCESS:
+      return {
+        ...state,
+        unfollowLoading: false,
+        unfollowDone: true,
+      };
+    case UNFOLLOW_FAILURE:
+      return {
+        ...state,
+        unfollowLoading: false,
+        unfollowError: action.error,
       };
     default:
       return state;
