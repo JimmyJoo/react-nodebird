@@ -4,6 +4,9 @@ import {
   ADD_POST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
+  REMOVE_POST,
+  REMOVE_POST_SUCCESS,
+  REMOVE_POST_FAILURE,
   ADD_COMMENT,
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
@@ -21,6 +24,21 @@ function* addPost(action) {
     yield put({
       type: ADD_POST_FAILURE,
       error: err.response.data,
+    });
+  }
+}
+
+function* removePost(action) {
+  try {
+    yield delay(1000);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      id: action.id,
+    });
+  } catch (err) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      error: err.reponse.data,
     });
   }
 }
@@ -44,10 +62,14 @@ function* watchAddPost() {
   yield takeLatest(ADD_POST, addPost);
 }
 
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST, removePost);
+}
+
 function* watchAddComment() {
   yield takeLatest(ADD_COMMENT, addComment);
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment)]);
+  yield all([fork(watchAddPost), fork(watchRemovePost), fork(watchAddComment)]);
 }
