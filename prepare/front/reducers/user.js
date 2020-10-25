@@ -53,13 +53,13 @@ const initialState = {
   loginData: {},
 };
 
-const dummyUser = (data) => ({
+const createDummyUser = (data) => ({
   ...data,
   nickname: 'Jimmy Joo',
   id: 1,
   Posts: [],
-  Followings: [],
-  Followers: [],
+  Followings: [{ nickname: 'a' }, { nickname: 'b' }, { nickname: 'c' }],
+  Followers: [{ nickname: 'A' }],
 });
 
 // reducer
@@ -77,7 +77,7 @@ const user = (state = initialState, action) => {
         ...state,
         logInLoading: false,
         logInDone: true,
-        me: dummyUser(action.data),
+        me: createDummyUser(action.data),
       };
     case LOG_IN_FAILURE:
       return {
