@@ -1,3 +1,5 @@
+import shortId from 'shortid';
+
 // actiion types
 export const ADD_POST = 'post/ADD_POST';
 export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
@@ -13,17 +15,25 @@ export const addPost = (data) => ({ type: ADD_POST, data });
 export const addComment = (data) => ({ type: ADD_COMMENT, data });
 
 // dummyPost
-const dummyPost = {
-  id: 2,
+const createDummyPost = (data) => ({
+  id: shortId.generate(),
   User: {
     id: 1,
-    nickname: 'JimmyJoo',
+    nickname: 'Jimmy Joo',
   },
-  content: '두 번째 게시글 #더미포스트',
+  content: data,
   Images: [],
   Comments: [],
-};
+});
 
+const createDummyComment = (data) => ({
+  id: shortId.generate(),
+  content: data,
+  User: {
+    id: 1,
+    nickname: 'Jimmy Joo',
+  },
+});
 // initialState
 const initialState = {
   mainPosts: [
@@ -88,7 +98,7 @@ const post = (state = initialState, action) => {
         ...state,
         addPostLoading: false,
         addPostDone: true,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [createDummyPost(action.data), ...state.mainPosts],
       };
     case ADD_POST_FAILURE:
       return {
@@ -104,8 +114,19 @@ const post = (state = initialState, action) => {
         addCommentError: null,
       };
     case ADD_COMMENT_SUCCESS:
+      const postIndex = state.mainPosts.findIndex(
+        (p) => p.id === action.data.postId
+      );
+      const newPost = { ...state.mainPosts[postIndex] };
+      newPost.Comments = [
+        createDummyComment(action.data.content),
+        ...newPost.Comments,
+      ];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = newPost;
       return {
         ...state,
+        mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
