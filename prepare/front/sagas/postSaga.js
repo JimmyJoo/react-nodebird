@@ -1,3 +1,4 @@
+import shortId from 'shortid';
 import { all, fork, takeLatest, delay, put } from 'redux-saga/effects';
 // import { addPostApi } from '../api/postApi';
 import {
@@ -11,19 +12,35 @@ import {
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
 } from '../reducers/post';
+import {
+  ADD_POST_TO_ME_SUCCESS,
+  ADD_POST_TO_ME_FAILURE,
+} from '../reducers/user';
 
 function* addPost(action) {
   try {
     yield delay(1000);
+    const id = shortId.generate();
     // const { data } = yield call(addPostApi, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: action.data,
+      data: {
+        id,
+        content: action.data,
+      },
+    });
+    yield put({
+      type: ADD_POST_TO_ME_SUCCESS,
+      id,
     });
   } catch (err) {
     yield put({
       type: ADD_POST_FAILURE,
       error: err.response.data,
+    });
+    yield put({
+      type: ADD_POST_TO_ME_FAILURE,
+      error: err.reponse.data,
     });
   }
 }

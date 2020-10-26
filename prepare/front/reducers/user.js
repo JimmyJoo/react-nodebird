@@ -1,4 +1,4 @@
-// actiion types
+// action types
 export const LOG_IN = 'user/LOG_IN';
 export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'user/LOG_IN_FAILURE';
@@ -23,9 +23,16 @@ export const UNFOLLOW = 'user/UNFOLLOW';
 export const UNFOLLOW_SUCCESS = 'user/UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'user/UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'user/ADD_POST_TO_ME';
+export const ADD_POST_TO_ME_SUCCESS = 'user/ADD_POST_TO_ME_SUCCESS';
+export const ADD_POST_TO_ME_FAILURE = 'user/ADD_POST_TO_ME_FAILURE';
+
 // action creator
 export const loginAction = (data) => ({ type: LOG_IN, data });
+
 export const logoutAction = () => ({ type: LOG_OUT });
+
+export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
 
 // initialState
 const initialState = {
@@ -47,6 +54,9 @@ const initialState = {
   unfollowLoading: false,
   unfollowDone: false,
   unfollowError: null,
+  addPostToMeLoading: false,
+  addPostToMeDone: false,
+  addPostToMeError: null,
   isLoggedIn: false,
   me: null,
   signUpData: {},
@@ -180,6 +190,29 @@ const user = (state = initialState, action) => {
         ...state,
         unfollowLoading: false,
         unfollowError: action.error,
+      };
+    case ADD_POST_TO_ME:
+      return {
+        ...state,
+        addPostToMeLoading: true,
+        addPostToMeDone: false,
+        addPostToMeError: null,
+      };
+    case ADD_POST_TO_ME_SUCCESS:
+      return {
+        ...state,
+        addPostToMeLoading: false,
+        addPostToMeDone: true,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.id }, ...state.me.Posts],
+        },
+      };
+    case ADD_POST_TO_ME_FAILURE:
+      return {
+        ...state,
+        addPostToMeLoading: false,
+        addPostToMeError: action.error,
       };
     default:
       return state;

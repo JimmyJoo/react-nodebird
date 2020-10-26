@@ -22,12 +22,12 @@ export const addComment = (data) => ({ type: ADD_COMMENT, data });
 
 // dummyPost
 const createDummyPost = (data) => ({
-  id: shortId.generate(),
+  id: data.id,
+  content: data.content,
   User: {
     id: 1,
     nickname: 'Jimmy Joo',
   },
-  content: data,
   Images: [],
   Comments: [],
 });
@@ -36,7 +36,7 @@ const createDummyComment = (data) => ({
   id: shortId.generate(),
   content: data,
   User: {
-    id: 1,
+    id: shortId.generate(),
     nickname: 'Jimmy Joo',
   },
 });
@@ -44,9 +44,9 @@ const createDummyComment = (data) => ({
 const initialState = {
   mainPosts: [
     {
-      id: 1,
+      id: shortId.generate(),
       User: {
-        id: 1,
+        id: shortId.generate(),
         nickname: 'JimmyJoo',
       },
       content: '첫 번째 게시글 #해시태그 #익스프레스',
@@ -66,12 +66,14 @@ const initialState = {
       ],
       Comments: [
         {
+          id: shortId.generate(),
           User: {
             nickname: '한슬',
           },
           content: '우와 개정판이 나왔군요~',
         },
         {
+          id: shortId.generate(),
           User: {
             nickname: '주',
           },
