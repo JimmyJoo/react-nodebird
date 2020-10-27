@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 // action types
 export const LOG_IN = 'user/LOG_IN';
 export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
@@ -82,173 +84,120 @@ const createDummyUser = (data) => ({
 });
 
 // reducer
-const user = (state = initialState, action) => {
-  switch (action.type) {
-    case LOG_IN:
-      return {
-        ...state,
-        logInLoading: true,
-        logInDone: false,
-        logInError: null,
-      };
-    case LOG_IN_SUCCESS:
-      return {
-        ...state,
-        logInLoading: false,
-        logInDone: true,
-        me: createDummyUser(action.data),
-      };
-    case LOG_IN_FAILURE:
-      return {
-        ...state,
-        logInLoading: false,
-        logInError: action.error,
-      };
-    case LOG_OUT:
-      return {
-        ...state,
-        logOutLoading: true,
-        logOutDone: false,
-        logOutError: null,
-      };
-    case LOG_OUT_SUCCESS:
-      return {
-        ...state,
-        logOutLoading: false,
-        logOutDone: true,
-        me: null,
-      };
-    case LOG_OUT_FAILURE:
-      return {
-        ...state,
-        logOutLoading: false,
-        logOutError: action.error,
-      };
-    case SIGN_UP:
-      return {
-        ...state,
-        signUpLoading: true,
-        signUpDone: false,
-        signUpError: null,
-      };
-    case SIGN_UP_SUCCESS:
-      return {
-        ...state,
-        signUpLoading: false,
-        signUpDone: true,
-      };
-    case SIGN_UP_FAILURE:
-      return {
-        ...state,
-        signUpLoading: false,
-        signUpError: action.error,
-      };
-    case CHANGE_NICKNAME:
-      return {
-        ...state,
-        changeNicknameLoading: true,
-        changeNicknameDone: false,
-        changeNicknameError: null,
-      };
-    case CHANGE_NICKNAME_SUCCESS:
-      return {
-        ...state,
-        changeNicknameLoading: false,
-        changeNicknameDone: true,
-      };
-    case CHANGE_NICKNAME_FAILURE:
-      return {
-        ...state,
-        changeNicknameLoading: false,
-        changeNicknameError: action.error,
-      };
-    case FOLLOW:
-      return {
-        ...state,
-        followLoading: true,
-        followDone: false,
-        followError: null,
-      };
-    case FOLLOW_SUCCESS:
-      return {
-        ...state,
-        followLoading: false,
-        followDone: true,
-      };
-    case FOLLOW_FAILURE:
-      return {
-        ...state,
-        followLoading: false,
-        followError: action.error,
-      };
-    case UNFOLLOW:
-      return {
-        ...state,
-        unfollowLoading: true,
-        unfollowDone: false,
-        unfollowError: null,
-      };
-    case UNFOLLOW_SUCCESS:
-      return {
-        ...state,
-        unfollowLoading: false,
-        unfollowDone: true,
-      };
-    case UNFOLLOW_FAILURE:
-      return {
-        ...state,
-        unfollowLoading: false,
-        unfollowError: action.error,
-      };
-    case ADD_POST_TO_ME:
-      return {
-        ...state,
-        addPostToMeLoading: true,
-        addPostToMeDone: false,
-        addPostToMeError: null,
-      };
-    case ADD_POST_TO_ME_SUCCESS:
-      return {
-        ...state,
-        addPostToMeLoading: false,
-        addPostToMeDone: true,
-        me: {
-          ...state.me,
-          Posts: [{ id: action.id }, ...state.me.Posts],
-        },
-      };
-    case ADD_POST_TO_ME_FAILURE:
-      return {
-        ...state,
-        addPostToMeLoading: false,
-        addPostToMeError: action.error,
-      };
-    case REMOVE_POST_OF_ME:
-      return {
-        ...state,
-        removePostOfMeLoading: true,
-        removePostOfMeDone: false,
-        removePostOfMeError: null,
-      };
-    case REMOVE_POST_OF_ME_SUCCESS:
-      return {
-        ...state,
-        removePostOfMeLoading: false,
-        removePostOfMeDone: true,
-        me: {
-          ...state.me,
-          Posts: state.me.Posts.filter((p) => p.id !== action.id),
-        },
-      };
-    case REMOVE_POST_OF_ME_FAILURE:
-      return {
-        ...state,
-        removePostOfMeLoading: false,
-        removePostOfMeError: action.error,
-      };
-    default:
-      return state;
-  }
-};
+const user = (state = initialState, action) =>
+  produce(state, (draft) => {
+    switch (action.type) {
+      case LOG_IN:
+        draft.logInLoading = true;
+        draft.logInDone = false;
+        draft.logInError = null;
+        break;
+      case LOG_IN_SUCCESS:
+        draft.logInLoading = false;
+        draft.loginDone = true;
+        draft.me = createDummyUser(action.data);
+        break;
+      case LOG_IN_FAILURE:
+        draft.logInLoading = false;
+        draft.logInError = action.error;
+        break;
+      case LOG_OUT:
+        draft.logOutLoading = false;
+        draft.logOutDone = false;
+        draft.logOutError = null;
+        break;
+      case LOG_OUT_SUCCESS:
+        draft.logOutLoading = false;
+        draft.logOutDone = true;
+        draft.me = null;
+        break;
+      case LOG_OUT_FAILURE:
+        draft.logOutLoading = false;
+        draft.logOutError = action.error;
+        break;
+      case SIGN_UP:
+        draft.signUpLoading = true;
+        draft.signUpDone = false;
+        draft.signUpError = null;
+        break;
+      case SIGN_UP_SUCCESS:
+        draft.signUpLoading = false;
+        draft.signUpDone = true;
+        break;
+      case SIGN_UP_FAILURE:
+        draft.signUpLoading = false;
+        draft.signUpError = action.error;
+        break;
+      case CHANGE_NICKNAME:
+        draft.changeNicknameLoading = true;
+        draft.changeNicknameDone = false;
+        draft.changeNicknameError = null;
+        break;
+      case CHANGE_NICKNAME_SUCCESS:
+        draft.changeNicknameLoading = false;
+        draft.changeNicknameDone = true;
+        break;
+      case CHANGE_NICKNAME_FAILURE:
+        draft.changeNicknameLoading = false;
+        draft.changeNicknameError = action.error;
+        break;
+      case FOLLOW:
+        draft.followLoading = true;
+        draft.followDone = false;
+        draft.followError = null;
+        break;
+      case FOLLOW_SUCCESS:
+        draft.followLoading = false;
+        draft.followDone = true;
+        break;
+      case FOLLOW_FAILURE:
+        draft.followLoading = false;
+        draft.followError = action.error;
+        break;
+      case UNFOLLOW:
+        draft.unfollowLoading = true;
+        draft.unfollowDone = false;
+        draft.unfollowError = null;
+        break;
+      case UNFOLLOW_SUCCESS:
+        draft.unfollowLoading = false;
+        draft.unfollowDone = true;
+        break;
+      case UNFOLLOW_FAILURE:
+        draft.unfollowLoading = false;
+        draft.unfollowError = action.error;
+        break;
+      case ADD_POST_TO_ME:
+        draft.addPostToMeLoading = true;
+        draft.addPostToMeDone = false;
+        draft.addPostToMeError = null;
+        break;
+      case ADD_POST_TO_ME_SUCCESS:
+        draft.addPostToMeLoading = false;
+        draft.addPostToMeDone = true;
+        draft.me.Posts.unshift({ id: action.id });
+        break;
+      case ADD_POST_TO_ME_FAILURE:
+        draft.addPostToMeLoading = false;
+        draft.addPostToMeError = action.error;
+        break;
+      case REMOVE_POST_OF_ME:
+        draft.removePostOfMeLoading = true;
+        draft.removePostOfMeDone = false;
+        draft.removePostOfMeError = action.error;
+        break;
+      case REMOVE_POST_OF_ME_SUCCESS:
+        draft.removePostOfMeLoading = false;
+        draft.removePostOfMeDone = true;
+        draft.me.Posts = draft.me.Posts.filter((p) => p.id !== action.id);
+        break;
+      case REMOVE_POST_OF_ME_FAILURE:
+        draft.removePostOfMeLoading = false;
+        draft.removePostOfMeError = action.error;
+        break;
+      default:
+        return state;
+    }
+  });
 
 export default user;
