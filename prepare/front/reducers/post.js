@@ -1,5 +1,6 @@
 import shortId from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 // actiion types
 export const ADD_POST = 'post/ADD_POST';
@@ -94,6 +95,32 @@ const initialState = {
   addCommentDone: false,
   addCommentError: null,
 };
+
+const fakePosts = Array(20)
+  .fill()
+  .map(() => ({
+    id: shortId.generate(),
+    User: {
+      id: shortId.generate(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.paragraph(),
+    Images: Array(Math.floor(Math.random() * 5))
+      .fill()
+      .map(() => ({
+        src: faker.image.imageUrl(),
+      })),
+    Comments: Array(Math.floor(Math.random() * 3))
+      .fill()
+      .map(() => ({
+        id: shortId.generate(),
+        User: {
+          nickname: faker.name.findName(),
+        },
+        content: faker.lorem.sentence(),
+      })),
+  }));
+initialState.mainPosts = initialState.mainPosts.concat(fakePosts);
 
 // reducer
 const post = (state = initialState, action) =>
