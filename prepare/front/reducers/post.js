@@ -1,8 +1,15 @@
-import shortId from 'shortid';
 import produce from 'immer';
-import faker from 'faker';
+import {
+  createDummyPost,
+  createDummyComment,
+  createDummyPosts,
+} from '../utils/postData';
 
 // actiion types
+export const LOAD_POSTS = 'post/LOAD_POSTS';
+export const LOAD_POSTS_SUCCESS = 'post/LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'post/LOAD_POSTS_FAILURE';
+
 export const ADD_POST = 'post/ADD_POST';
 export const ADD_POST_SUCCESS = 'post/ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'post/ADD_POST_FAILURE';
@@ -16,75 +23,25 @@ export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE';
 
 // action creator
+export const loadPosts = () => ({
+  type: LOAD_POSTS,
+  data: createDummyPosts(10),
+});
+
 export const addPost = (data) => ({ type: ADD_POST, data });
 
 export const removePost = (id) => ({ type: REMOVE_POST, id });
 
 export const addComment = (data) => ({ type: ADD_COMMENT, data });
 
-// dummyPost
-const createDummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: 'Jimmy Joo',
-  },
-  Images: [],
-  Comments: [],
-});
-
-const createDummyComment = (data) => ({
-  id: shortId.generate(),
-  content: data,
-  User: {
-    id: shortId.generate(),
-    nickname: 'Jimmy Joo',
-  },
-});
 // initialState
 const initialState = {
-  mainPosts: [
-    {
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: 'JimmyJoo',
-      },
-      content: '첫 번째 게시글 #해시태그 #익스프레스',
-      Images: [
-        {
-          src:
-            'https://image.shutterstock.com/image-photo/mountain-valley-during-sunrise-natural-600w-1668334120.jpg',
-        },
-        {
-          src:
-            'https://image.shutterstock.com/image-photo/mountain-valley-during-sunrise-natural-600w-1668334120.jpg',
-        },
-        {
-          src:
-            'https://image.shutterstock.com/image-photo/mountain-valley-during-sunrise-natural-600w-1668334120.jpg',
-        },
-      ],
-      Comments: [
-        {
-          id: shortId.generate(),
-          User: {
-            nickname: '한슬',
-          },
-          content: '우와 개정판이 나왔군요~',
-        },
-        {
-          id: shortId.generate(),
-          User: {
-            nickname: '주',
-          },
-          content: '헬로우~',
-        },
-      ],
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
+  hasMorePost: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -96,36 +53,25 @@ const initialState = {
   addCommentError: null,
 };
 
-const fakePosts = Array(20)
-  .fill()
-  .map(() => ({
-    id: shortId.generate(),
-    User: {
-      id: shortId.generate(),
-      nickname: faker.name.findName(),
-    },
-    content: faker.lorem.paragraph(),
-    Images: Array(Math.floor(Math.random() * 5))
-      .fill()
-      .map(() => ({
-        src: faker.image.imageUrl(),
-      })),
-    Comments: Array(Math.floor(Math.random() * 3))
-      .fill()
-      .map(() => ({
-        id: shortId.generate(),
-        User: {
-          nickname: faker.name.findName(),
-        },
-        content: faker.lorem.sentence(),
-      })),
-  }));
-initialState.mainPosts = initialState.mainPosts.concat(fakePosts);
-
 // reducer
 const post = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POSTS:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST:
         draft.addPostLoading = true;
         draft.addPostDone = false;

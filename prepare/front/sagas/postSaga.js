@@ -2,6 +2,9 @@ import shortId from 'shortid';
 import { all, fork, takeLatest, delay, put } from 'redux-saga/effects';
 // import { addPostApi } from '../api/postApi';
 import {
+  LOAD_POSTS,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
   ADD_POST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
@@ -18,6 +21,21 @@ import {
   REMOVE_POST_OF_ME_SUCCESS,
   REMOVE_POST_OF_ME_FAILURE,
 } from '../reducers/user';
+
+function* loadPosts(action) {
+  try {
+    yield delay(1000);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function* addPost(action) {
   try {
@@ -85,6 +103,10 @@ function* addComment(action) {
   }
 }
 
+function* watchLoadPosts() {
+  yield takeLatest(LOAD_POSTS, loadPosts);
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST, addPost);
 }
@@ -98,5 +120,10 @@ function* watchAddComment() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchRemovePost), fork(watchAddComment)]);
+  yield all([
+    fork(watchLoadPosts),
+    fork(watchAddPost),
+    fork(watchRemovePost),
+    fork(watchAddComment),
+  ]);
 }

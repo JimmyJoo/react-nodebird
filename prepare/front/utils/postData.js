@@ -1,7 +1,7 @@
 import shortId from 'shortid';
 import faker from 'faker';
 
-export const generateFakePosts = (number) =>
+export const createDummyPosts = (number) =>
   Array(number)
     .fill()
     .map(() => ({
