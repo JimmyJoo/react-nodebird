@@ -15,6 +15,8 @@ import {
 import {
   ADD_POST_TO_ME_SUCCESS,
   ADD_POST_TO_ME_FAILURE,
+  REMOVE_POST_OF_ME_SUCCESS,
+  REMOVE_POST_OF_ME_FAILURE,
 } from '../reducers/user';
 
 function* addPost(action) {
@@ -52,10 +54,18 @@ function* removePost(action) {
       type: REMOVE_POST_SUCCESS,
       id: action.id,
     });
+    yield put({
+      type: REMOVE_POST_OF_ME_SUCCESS,
+      id: action.id,
+    });
   } catch (err) {
     yield put({
       type: REMOVE_POST_FAILURE,
       error: err.reponse.data,
+    });
+    yield put({
+      type: REMOVE_POST_OF_ME_FAILURE,
+      error: err.response.data,
     });
   }
 }
