@@ -18,7 +18,6 @@ const Home = () => {
     function onScroll() {
       const sum = window.scrollY + document.documentElement.clientHeight;
       const scrollPos = document.documentElement.scrollHeight;
-      console.log(scrollPos, sum, scrollPos - sum);
       if (scrollPos - sum < 300) {
         if (hasMorePosts && !loadPostsLoading) {
           dispatch(loadPosts());

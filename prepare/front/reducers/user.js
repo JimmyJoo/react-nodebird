@@ -38,6 +38,10 @@ export const loginAction = (data) => ({ type: LOG_IN, data });
 
 export const logoutAction = () => ({ type: LOG_OUT });
 
+export const follow = (id) => ({ type: FOLLOW, id });
+
+export const unfollow = (id) => ({ type: UNFOLLOW, id });
+
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
 
 export const removePostOfMe = (id) => ({ type: REMOVE_POST_OF_ME, id });
@@ -149,6 +153,7 @@ const user = (state = initialState, action) =>
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
+        draft.me.Followings.push({ id: action.id });
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
@@ -162,6 +167,9 @@ const user = (state = initialState, action) =>
       case UNFOLLOW_SUCCESS:
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
+        draft.me.Followings = draft.me.Followings.filter(
+          (v) => v.id !== action.id
+        );
         break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
