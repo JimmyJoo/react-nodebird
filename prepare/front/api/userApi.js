@@ -9,5 +9,5 @@ export const logOutApi = () => {
 };
 
 export const signUpApi = (data) => {
-  return axios.post('/user/signup', data);
+  return axios.post('/user', data);
 };

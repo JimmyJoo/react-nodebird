@@ -1,5 +1,5 @@
-import { all, fork, takeLatest, delay, put } from 'redux-saga/effects';
-// import { logInApi, logOutApi, signUpApi } from '../api/userApi';
+import { all, fork, takeLatest, delay, put, call } from 'redux-saga/effects';
+import { signUpApi } from '../api/userApi';
 import {
   LOG_IN,
   LOG_IN_SUCCESS,
@@ -51,8 +51,8 @@ function* logOut() {
 
 function* signUp(action) {
   try {
-    yield delay(1000);
-    // const { data } = yield call(signUpApi, action.data);
+    const { result } = yield call(signUpApi, action.data);
+    console.log('result: ', result);
     yield put({
       type: SIGN_UP_SUCCESS,
       data: action.data,
