@@ -50,6 +50,7 @@ function* logOut() {
 }
 
 function* signUp(action) {
+  console.log('signUp*: ', action.data);
   try {
     const { result } = yield call(signUpApi, action.data);
     console.log('result: ', result);
