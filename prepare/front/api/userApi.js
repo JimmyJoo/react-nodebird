@@ -9,5 +9,5 @@ export const logOutApi = () => {
 };
 
 export const signUpApi = (data) => {
-  return axios.post('/user', data);
+  return axios.post('http://localhost:3065/user', data);
 };
