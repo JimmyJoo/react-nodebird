@@ -12,6 +12,7 @@ export const LOG_OUT_FAILURE = 'user/LOG_OUT_FAILURE';
 export const SIGN_UP = 'user/SIGN_UP';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
+export const SIGN_UP_DONE = 'user/SIGN_UP_DONE';
 
 export const CHANGE_NICKNAME = 'user/CHANGE_NICKNAME';
 export const CHANGE_NICKNAME_SUCCESS = 'user/CHANGE_NICKNAME_SUCCESS';
@@ -131,6 +132,9 @@ const user = (state = initialState, action) =>
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
+        break;
+      case SIGN_UP_DONE:
+        draft.signUpDone = false;
         break;
       case CHANGE_NICKNAME:
         draft.changeNicknameLoading = true;
