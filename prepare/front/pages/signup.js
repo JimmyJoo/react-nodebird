@@ -23,7 +23,7 @@ const StErrorMessage = styled.div`
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError } = useSelector(
+  const { me, signUpLoading, signUpDone, signUpError } = useSelector(
     (state) => state.user
   );
 
@@ -65,13 +65,19 @@ const Signup = () => {
   }, [email, nickname, password, passwordCheck, term]);
 
   useEffect(() => {
+    if (!(me && me.id)) {
+      Router.replace('/');
+    }
+  }, [me && me.id]);
+
+  useEffect(() => {
     if (signUpDone) {
       setEmail('');
       setNickname('');
       setPassword('');
       setPasswordCheck('');
       setTerm(false);
-      Router.push('/');
+      Router.replace('/');
       dispatch({ type: SIGN_UP_DONE });
     }
   }, [signUpDone]);
