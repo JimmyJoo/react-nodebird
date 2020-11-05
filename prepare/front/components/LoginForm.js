@@ -17,12 +17,21 @@ const FormWrapper = styled(Form)`
 const LoginForm = () => {
   const dispatch = useDispatch();
 
-  const { logInLoading, logInDone } = useSelector((state) => state.user);
+  const { logInLoading, logInDone, logInError } = useSelector(
+    (state) => state.user
+  );
   const [email, setEmail, onChangeEmail] = useInput('');
   const [password, setPassword, onChangePassword] = useInput('');
   const onSubmitForm = useCallback(() => {
-    dispatch(loginAction({ name: 'Joo', age: 27, password: 'qwerty' }));
+    console.log('onSubmitForm: ', email, password);
+    dispatch(loginAction({ email, password }));
   }, [email, password]);
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
 
   useEffect(() => {
     if (logInDone) {
