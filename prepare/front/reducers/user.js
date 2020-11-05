@@ -79,15 +79,6 @@ const initialState = {
   loginData: {},
 };
 
-const createDummyUser = (data) => ({
-  ...data,
-  nickname: 'Jimmy Joo',
-  id: 1,
-  Posts: [],
-  Followings: [{ nickname: 'a' }, { nickname: 'b' }, { nickname: 'c' }],
-  Followers: [{ nickname: 'A' }],
-});
-
 // reducer
 const user = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -100,7 +91,7 @@ const user = (state = initialState, action) =>
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.loginDone = true;
-        draft.me = createDummyUser(action.data);
+        draft.me = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
