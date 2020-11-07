@@ -1,5 +1,5 @@
 import { all, fork, takeLatest, delay, put, call } from 'redux-saga/effects';
-import { logInApi, logOutApi, signUpApi } from '../api/userApi';
+import { logInApi, logOutApi, signUpApi, loadMyInfoApi } from '../api/userApi';
 import {
   LOG_IN,
   LOG_IN_SUCCESS,
@@ -16,6 +16,9 @@ import {
   FOLLOW_SUCCESS,
   UNFOLLOW_FAILURE,
   UNFOLLOW_SUCCESS,
+  LOAD_MY_INFO,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_SUCCESS,
 } from '../reducers/user';
 
 function* logIn(action) {
@@ -49,14 +52,29 @@ function* logOut() {
 
 function* signUp(action) {
   try {
-    const { result } = yield call(signUpApi, action.data);
+    const result = yield call(signUpApi, action.data);
     yield put({
       type: SIGN_UP_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* loadMyInfo(action) {
+  try {
+    const result = yield call(loadMyInfoApi, action.data);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
       error: err.response.data,
     });
   }
@@ -104,6 +122,10 @@ function* watchSignUp() {
   yield takeLatest(SIGN_UP, signUp);
 }
 
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO, loadMyInfo);
+}
+
 function* watchFollow() {
   yield takeLatest(FOLLOW, follow);
 }
@@ -117,6 +139,7 @@ export default function* userSaga() {
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchSignUp),
+    fork(watchLoadMyInfo),
     fork(watchFollow),
     fork(watchUnfollow),
   ]);

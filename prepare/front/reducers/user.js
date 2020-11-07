@@ -14,6 +14,10 @@ export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 export const SIGN_UP_DONE = 'user/SIGN_UP_DONE';
 
+export const LOAD_MY_INFO = 'user/LOAD_MY_INFO';
+export const LOAD_MY_INFO_SUCCESS = 'user/LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'user/LLOAD_MY_INFO_FAILURE';
+
 export const CHANGE_NICKNAME = 'user/CHANGE_NICKNAME';
 export const CHANGE_NICKNAME_SUCCESS = 'user/CHANGE_NICKNAME_SUCCESS';
 export const CHANGE_NICKNAME_FAILURE = 'user/CHANGE_NICKNAME_FAILURE';
@@ -58,6 +62,9 @@ const initialState = {
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
   changeNicknameLoading: false,
   changeNicknameDone: false,
   changeNicknameError: null,
@@ -126,6 +133,20 @@ const user = (state = initialState, action) =>
         break;
       case SIGN_UP_DONE:
         draft.signUpDone = false;
+        break;
+      case LOAD_MY_INFO:
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoDone = false;
+        draft.loadMyInfoError = null;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoDone = true;
+        draft.me = action.data;
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
         break;
       case CHANGE_NICKNAME:
         draft.changeNicknameLoading = true;
