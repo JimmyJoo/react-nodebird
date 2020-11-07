@@ -1,9 +1,5 @@
 import produce from 'immer';
-import {
-  createDummyPost,
-  createDummyComment,
-  createDummyPosts,
-} from '../utils/postData';
+import { createDummyPosts } from '../utils/postData';
 
 // actiion types
 export const LOAD_POSTS = 'post/LOAD_POSTS';
@@ -80,7 +76,7 @@ const post = (state = initialState, action) =>
       case ADD_POST_SUCCESS:
         draft.addPostLoading = false;
         draft.addPostDone = true;
-        draft.mainPosts.unshift(createDummyPost(action.data));
+        draft.mainPosts.unshift(action.data);
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
@@ -107,9 +103,9 @@ const post = (state = initialState, action) =>
         break;
       case ADD_COMMENT_SUCCESS:
         const newPost = draft.mainPosts.find(
-          (p) => p.id === action.data.postId
+          (p) => p.id === action.data.PostId
         );
-        newPost.Comments.unshift(createDummyComment(action.data.content));
+        newPost.Comments.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
