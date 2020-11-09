@@ -1,5 +1,5 @@
 import { all, fork, takeLatest, delay, put, call } from 'redux-saga/effects';
-import { addPostApi, addCommentApi } from '../api/postApi';
+import { addPostApi, addCommentApi, loadPostsApi } from '../api/postApi';
 import {
   LOAD_POSTS,
   LOAD_POSTS_SUCCESS,
@@ -23,10 +23,10 @@ import {
 
 function* loadPosts(action) {
   try {
-    yield delay(1000);
+    const result = yield call(loadPostsApi, action.data);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -41,9 +41,7 @@ function* addPost(action) {
     const result = yield call(addPostApi, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        content: result.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME_SUCCESS,
@@ -87,6 +85,7 @@ function* removePost(action) {
 function* addComment(action) {
   try {
     const result = yield call(addCommentApi, action.data);
+    console.log('add Comment result: ', result);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,

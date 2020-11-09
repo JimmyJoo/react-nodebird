@@ -4,7 +4,7 @@ import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { loadPosts } from '../reducers/post';
-import { LOAD_MY_INFO } from '../reducers/user';
+import { loadMyInfo } from '../reducers/user';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -15,12 +15,7 @@ const Home = () => {
   );
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_MY_INFO,
-    });
-    dispatch({
-      type: LOAD_MY_INFO,
-    });
+    dispatch(loadMyInfo());
   }, []);
 
   useEffect(() => {
