@@ -4,9 +4,11 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
-
+const morgan = require('morgan');
+const postsRouter = require('./routers/posts');
 const postRouter = require('./routers/post');
 const userRouter = require('./routers/user');
+
 const db = require('./models');
 const passportConfig = require('./passport');
 
@@ -26,6 +28,7 @@ app.use(
     credentials: true, // to share cookie between diff domains
   })
 );
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -39,6 +42,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
 

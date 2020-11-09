@@ -20,14 +20,17 @@ router.get('/', async (req, res, next) => {
         include: [
           {
             model: Post,
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followings',
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followers',
+            attributes: ['id'],
           },
         ],
       });
@@ -63,14 +66,17 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post,
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followings',
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followers',
+            attributes: ['id'],
           },
         ],
       });
@@ -87,7 +93,6 @@ router.post('/logout', isLoggedIn, (req, res, next) => {
 
 router.post('/', isNotLoggedIn, async (req, res, next) => {
   try {
-    console.log('req: ', req.body);
     const exUser = await User.findOne({
       where: {
         email: req.body.email,
