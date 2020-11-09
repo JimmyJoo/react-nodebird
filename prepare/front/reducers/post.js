@@ -1,5 +1,4 @@
 import produce from 'immer';
-import { createDummyPosts } from '../utils/postData';
 
 // actiion types
 export const LOAD_POSTS = 'post/LOAD_POSTS';
@@ -19,15 +18,9 @@ export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE';
 
 // action creator
-export const loadPosts = () => ({
-  type: LOAD_POSTS,
-  data: createDummyPosts(10),
-});
-
+export const loadPosts = () => ({ type: LOAD_POSTS });
 export const addPost = (data) => ({ type: ADD_POST, data });
-
 export const removePost = (id) => ({ type: REMOVE_POST, id });
-
 export const addComment = (data) => ({ type: ADD_COMMENT, data });
 
 // initialState

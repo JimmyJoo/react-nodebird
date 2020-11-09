@@ -39,16 +39,14 @@ export const REMOVE_POST_OF_ME_SUCCESS = 'user/REMOVE_POST_OF_ME_SUCCESS';
 export const REMOVE_POST_OF_ME_FAILURE = 'user/REMOVE_POST_OF_ME_FAILURE';
 
 // action creator
-export const loginAction = (data) => ({ type: LOG_IN, data });
-
-export const logoutAction = () => ({ type: LOG_OUT });
-
+export const login = (data) => ({ type: LOG_IN, data });
+export const logout = () => ({ type: LOG_OUT });
+export const signup = () => ({ type: SIGN_UP });
+export const loadMyInfo = () => ({ type: LOAD_MY_INFO });
+export const changeMyNickname = () => ({ type: CHANGE_NICKNAME });
 export const follow = (id) => ({ type: FOLLOW, id });
-
 export const unfollow = (id) => ({ type: UNFOLLOW, id });
-
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
-
 export const removePostOfMe = (id) => ({ type: REMOVE_POST_OF_ME, id });
 
 // initialState
