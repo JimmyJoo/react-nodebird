@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+export const loadPostsApi = () => axios.get('/posts');
+
 export const addPostApi = (data) => axios.post('/post', { content: data });
 
 export const addCommentApi = (data) =>
