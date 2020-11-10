@@ -17,11 +17,21 @@ export const ADD_COMMENT = 'post/ADD_COMMENT';
 export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE';
 
+export const LIKE_POST = 'post/LIKE_POST';
+export const LIKE_POST_SUCCESS = 'post/LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'post/LIKE_POST_FAILURE';
+
+export const UNLIKE_POST = 'post/UNLIKE_POST';
+export const UNLIKE_POST_SUCCESS = 'post/UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'post/UNLIKE_POST_FAILURE';
+
 // action creator
 export const loadPosts = () => ({ type: LOAD_POSTS });
 export const addPost = (data) => ({ type: ADD_POST, data });
 export const removePost = (id) => ({ type: REMOVE_POST, id });
 export const addComment = (data) => ({ type: ADD_COMMENT, data });
+export const likePost = (id) => ({ type: LIKE_POST, data: id });
+export const unlikePost = (id) => ({ type: UNLIKE_POST, data: id });
 
 // initialState
 const initialState = {
@@ -40,6 +50,12 @@ const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+  unlikePostLoading: false,
+  unlikePostDone: false,
+  unlikePostError: null,
 };
 
 // reducer
@@ -105,6 +121,42 @@ const post = (state = initialState, action) =>
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
+        break;
+      case LIKE_POST:
+        draft.likePostLoading = true;
+        draft.likePostDone = false;
+        draft.likePostError = null;
+        break;
+      case LIKE_POST_SUCCESS:
+        const likedPost = draft.mainPosts.find(
+          (p) => p.id === action.data.PostId
+        );
+        likedPost.Likers.push({ id: action.data.UserId });
+        draft.likePostLoading = false;
+        draft.likePostDone = true;
+        break;
+      case LIKE_POST_FAILURE:
+        draft.likePostLoading = false;
+        draft.likePostError = action.error;
+        break;
+      case UNLIKE_POST:
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS:
+        const unlikedPost = draft.mainPosts.find(
+          (p) => p.id === action.data.PostId
+        );
+        unlikedPost.Likers = unlikedPost.Likers.filter(
+          (p) => p.id !== action.data.UserId
+        );
+        draft.unlikePostLoading = false;
+        draft.unlikePostDone = true;
+        break;
+      case UNLIKE_POST_FAILURE:
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
         break;
       default:
         return state;
