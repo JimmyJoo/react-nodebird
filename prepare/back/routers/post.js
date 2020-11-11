@@ -105,6 +105,7 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
   try {
     await Post.destroy({
       where: { id: req.params.postId },
+      UserId: req.user.id,
     });
     res.send({ PostId: req.params.postId });
   } catch (error) {
