@@ -1,5 +1,11 @@
 import { all, fork, takeLatest, delay, put, call } from 'redux-saga/effects';
-import { logInApi, logOutApi, signUpApi, loadMyInfoApi } from '../api/userApi';
+import {
+  logInApi,
+  logOutApi,
+  signUpApi,
+  loadMyInfoApi,
+  changeNicknameApi,
+} from '../api/userApi';
 import {
   LOG_IN,
   LOG_IN_SUCCESS,
@@ -19,6 +25,9 @@ import {
   LOAD_MY_INFO,
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_SUCCESS,
+  CHANGE_NICKNAME,
+  CHANGE_NICKNAME_FAILURE,
+  CHANGE_NICKNAME_SUCCESS,
 } from '../reducers/user';
 
 function* logIn(action) {
@@ -110,6 +119,21 @@ function* unfollow(action) {
   }
 }
 
+function* changeNickname(action) {
+  try {
+    const result = yield call(changeNicknameApi, action.nickname);
+    yield put({
+      type: CHANGE_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: CHANGE_NICKNAME_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN, logIn);
 }
@@ -134,6 +158,10 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW, unfollow);
 }
 
+function* watchChangeNickname() {
+  yield takeLatest(CHANGE_NICKNAME, changeNickname);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -142,5 +170,6 @@ export default function* userSaga() {
     fork(watchLoadMyInfo),
     fork(watchFollow),
     fork(watchUnfollow),
+    fork(watchChangeNickname),
   ]);
 }

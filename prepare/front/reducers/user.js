@@ -43,7 +43,10 @@ export const login = (data) => ({ type: LOG_IN, data });
 export const logout = () => ({ type: LOG_OUT });
 export const signup = () => ({ type: SIGN_UP });
 export const loadMyInfo = () => ({ type: LOAD_MY_INFO });
-export const changeMyNickname = () => ({ type: CHANGE_NICKNAME });
+export const changeNickname = (nickname) => ({
+  type: CHANGE_NICKNAME,
+  nickname,
+});
 export const follow = (id) => ({ type: FOLLOW, id });
 export const unfollow = (id) => ({ type: UNFOLLOW, id });
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
@@ -152,6 +155,7 @@ const user = (state = initialState, action) =>
         draft.changeNicknameError = null;
         break;
       case CHANGE_NICKNAME_SUCCESS:
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;
@@ -211,7 +215,7 @@ const user = (state = initialState, action) =>
       case REMOVE_POST_OF_ME_SUCCESS:
         draft.removePostOfMeLoading = false;
         draft.removePostOfMeDone = true;
-        draft.me.Posts = draft.me.Posts.filter((p) => p.id !== action.id);
+        draft.me.Posts = draft.me.Posts.filter((p) => p.id !== action.PostId);
         break;
       case REMOVE_POST_OF_ME_FAILURE:
         draft.removePostOfMeLoading = false;
