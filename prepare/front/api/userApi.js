@@ -7,3 +7,5 @@ export const logOutApi = () => axios.post('/user/logout');
 export const signUpApi = (data) => axios.post('/user', data);
 
 export const loadMyInfoApi = () => axios.get('/user');
+
+export const changeNicknameApi = (data) => axios.patch(`/user/${data}`);
