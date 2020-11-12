@@ -114,17 +114,17 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
   }
 });
 
-router.patch('/nickname', isLoggedIn, async (req, res, next) => {
+router.patch('/:nickname', isLoggedIn, async (req, res, next) => {
   try {
     await User.update(
       {
-        nickname: req.body.nickname,
+        nickname: req.params.nickname,
       },
       {
         where: { id: req.user.id },
       }
     );
-    res.status(200).send({ nickname: req.body.nickname });
+    res.status(200).send({ nickname: req.params.nickname });
   } catch (error) {
     console.error(error);
     next(error);
