@@ -12,7 +12,11 @@ export const loadMyInfoApi = () => axios.get('/user');
 export const changeNicknameApi = (data) => axios.patch(`/user/${data}`);
 
 // data: user id
-export const followApi = (data) => axios.patch(`user/${data}/follow`);
+export const followApi = (data) => axios.patch(`/user/${data}/follow`);
 
 // data: user id
-export const unfollowApi = (data) => axios.delete(`user/${data}/follow`);
+export const unfollowApi = (data) => axios.delete(`/user/${data}/follow`);
+
+export const loadFollowersApi = () => axios.get('/user/followers');
+
+export const loadFollowingsApi = () => axios.get('/user/followings');

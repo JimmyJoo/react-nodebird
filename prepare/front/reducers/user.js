@@ -38,6 +38,14 @@ export const REMOVE_POST_OF_ME = 'user/REMOVE_POST_OF_ME';
 export const REMOVE_POST_OF_ME_SUCCESS = 'user/REMOVE_POST_OF_ME_SUCCESS';
 export const REMOVE_POST_OF_ME_FAILURE = 'user/REMOVE_POST_OF_ME_FAILURE';
 
+export const LOAD_FOLLOWERS = 'user/LOAD_FOLLOWERS';
+export const LOAD_FOLLOWERS_SUCCESS = 'user/LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'user/LOAD_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWINGS = 'user/LOAD_FOLLOWINGS';
+export const LOAD_FOLLOWINGS_SUCCESS = 'user/LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'user/LOAD_FOLLOWINGS_FAILURE';
+
 // action creator
 export const login = (data) => ({ type: LOG_IN, data });
 export const logout = () => ({ type: LOG_OUT });
@@ -51,6 +59,8 @@ export const follow = (data) => ({ type: FOLLOW, data });
 export const unfollow = (data) => ({ type: UNFOLLOW, data });
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
 export const removePostOfMe = (id) => ({ type: REMOVE_POST_OF_ME, id });
+export const loadFollowers = () => ({ type: LOAD_FOLLOWERS });
+export const loadFollowings = () => ({ type: LOAD_FOLLOWINGS });
 
 // initialState
 const initialState = {
@@ -81,6 +91,12 @@ const initialState = {
   removePostOfMeLoading: false,
   removePostOfMeDone: false,
   removePostOfMeError: null,
+  loadFollowersLoading: false,
+  loadFollowersDone: false,
+  loadFollowersError: null,
+  loadFollowingsLoading: false,
+  loadFollowingsDone: false,
+  loadFollowingsError: null,
   isLoggedIn: false,
   me: null,
   signUpData: {},
@@ -169,7 +185,6 @@ const user = (state = initialState, action) =>
         draft.followError = null;
         break;
       case FOLLOW_SUCCESS:
-        console.log('action: ', action);
         draft.followLoading = false;
         draft.followDone = true;
         draft.me.Followings.push({ id: action.data.UserId });
@@ -221,6 +236,34 @@ const user = (state = initialState, action) =>
       case REMOVE_POST_OF_ME_FAILURE:
         draft.removePostOfMeLoading = false;
         draft.removePostOfMeError = action.error;
+        break;
+      case LOAD_FOLLOWERS:
+        draft.loadFollowersLoading = true;
+        draft.loadFollowersDone = false;
+        draft.loadFollowersError = action.error;
+        break;
+      case LOAD_FOLLOWERS_SUCCESS:
+        draft.loadFollowersLoading = false;
+        draft.loadFollowersDone = true;
+        draft.me.Followers = action.data;
+        break;
+      case LOAD_FOLLOWERS_FAILURE:
+        draft.loadFollowersLoading = false;
+        draft.loadFollowersError = action.error;
+        break;
+      case LOAD_FOLLOWINGS:
+        draft.loadFollowingsLoading = true;
+        draft.loadFollowingsDone = false;
+        draft.loadFollowingsError = action.error;
+        break;
+      case LOAD_FOLLOWINGS_SUCCESS:
+        draft.loadFollowingsLoading = false;
+        draft.loadFollowingsDone = true;
+        draft.me.Followings = action.data;
+        break;
+      case LOAD_FOLLOWINGS_FAILURE:
+        draft.loadFollowingsLoading = false;
+        draft.loadFollowingsError = action.error;
         break;
       default:
         return state;

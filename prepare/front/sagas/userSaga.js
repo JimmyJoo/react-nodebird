@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, delay, put, call } from 'redux-saga/effects';
+import { all, fork, takeLatest, put, call } from 'redux-saga/effects';
 import {
   logInApi,
   logOutApi,
@@ -7,6 +7,8 @@ import {
   changeNicknameApi,
   followApi,
   unfollowApi,
+  loadFollowersApi,
+  loadFollowingsApi,
 } from '../api/userApi';
 import {
   LOG_IN,
@@ -30,6 +32,12 @@ import {
   CHANGE_NICKNAME,
   CHANGE_NICKNAME_FAILURE,
   CHANGE_NICKNAME_SUCCESS,
+  LOAD_FOLLOWERS,
+  LOAD_FOLLOWINGS,
+  LOAD_FOLLOWERS_SUCCESS,
+  LOAD_FOLLOWERS_FAILURE,
+  LOAD_FOLLOWINGS_SUCCESS,
+  LOAD_FOLLOWINGS_FAILURE,
 } from '../reducers/user';
 
 function* logIn(action) {
@@ -136,6 +144,38 @@ function* changeNickname(action) {
   }
 }
 
+function* loadFollowers(action) {
+  try {
+    const result = yield call(loadFollowersApi);
+    console.log('result1: ', result);
+    yield put({
+      type: LOAD_FOLLOWERS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FOLLOWERS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* loadFollowings(action) {
+  try {
+    const result = yield call(loadFollowingsApi);
+    console.log('result2: ', result);
+    yield put({
+      type: LOAD_FOLLOWINGS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FOLLOWINGS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN, logIn);
 }
@@ -164,6 +204,14 @@ function* watchChangeNickname() {
   yield takeLatest(CHANGE_NICKNAME, changeNickname);
 }
 
+function* watchLoadFollowers() {
+  yield takeLatest(LOAD_FOLLOWERS, loadFollowers);
+}
+
+function* watchLoadFollowings() {
+  yield takeLatest(LOAD_FOLLOWINGS, loadFollowings);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -173,5 +221,7 @@ export default function* userSaga() {
     fork(watchFollow),
     fork(watchUnfollow),
     fork(watchChangeNickname),
+    fork(watchLoadFollowers),
+    fork(watchLoadFollowings),
   ]);
 }

@@ -180,6 +180,7 @@ router.get('/followings', isLoggedIn, async (req, res, next) => {
       res.status(403).send('유저가 존재하지 않습니다.');
     }
     const followings = await user.getFollowings();
+    console.log('followings: ', followings);
     res.status(200).send(followings);
   } catch (error) {
     console.error(error);
