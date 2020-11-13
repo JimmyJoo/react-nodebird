@@ -47,8 +47,8 @@ export const changeNickname = (nickname) => ({
   type: CHANGE_NICKNAME,
   nickname,
 });
-export const follow = (id) => ({ type: FOLLOW, id });
-export const unfollow = (id) => ({ type: UNFOLLOW, id });
+export const follow = (data) => ({ type: FOLLOW, data });
+export const unfollow = (data) => ({ type: UNFOLLOW, data });
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
 export const removePostOfMe = (id) => ({ type: REMOVE_POST_OF_ME, id });
 
@@ -169,9 +169,10 @@ const user = (state = initialState, action) =>
         draft.followError = null;
         break;
       case FOLLOW_SUCCESS:
+        console.log('action: ', action);
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.Followings.push({ id: action.id });
+        draft.me.Followings.push({ id: action.data.UserId });
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
@@ -186,7 +187,7 @@ const user = (state = initialState, action) =>
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
         draft.me.Followings = draft.me.Followings.filter(
-          (v) => v.id !== action.id
+          (v) => v.id !== action.data.UserId
         );
         break;
       case UNFOLLOW_FAILURE:

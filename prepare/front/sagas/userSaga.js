@@ -5,6 +5,8 @@ import {
   signUpApi,
   loadMyInfoApi,
   changeNicknameApi,
+  followApi,
+  unfollowApi,
 } from '../api/userApi';
 import {
   LOG_IN,
@@ -91,10 +93,10 @@ function* loadMyInfo(action) {
 
 function* follow(action) {
   try {
-    yield delay(1000);
+    const result = yield call(followApi, action.data);
     yield put({
       type: FOLLOW_SUCCESS,
-      id: action.id,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -106,10 +108,10 @@ function* follow(action) {
 
 function* unfollow(action) {
   try {
-    yield delay(1000);
+    const result = yield call(unfollowApi, action.data);
     yield put({
       type: UNFOLLOW_SUCCESS,
-      id: action.id,
+      data: result.data,
     });
   } catch (err) {
     yield put({

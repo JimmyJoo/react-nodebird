@@ -131,4 +131,32 @@ router.patch('/:nickname', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.patch('/:userId/follow', isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+    if (!user) {
+      res.status(403).send('유저가 존재하지 않습니다.');
+    }
+    await user.addFollowers(req.user.id);
+    res.status(200).send({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:userId/follow', isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+    if (!user) {
+      res.status(403).send('유저가 존재하지 않습니다.');
+    }
+    await user.removeFollowers(req.user.id);
+    res.status(200).send({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;
