@@ -30,6 +30,10 @@ export const UNFOLLOW = 'user/UNFOLLOW';
 export const UNFOLLOW_SUCCESS = 'user/UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'user/UNFOLLOW_FAILURE';
 
+export const REMOVE_FOLLOWER = 'user/REMOVE_FOLLOWER';
+export const REMOVE_FOLLOWER_SUCCESS = 'user/REMOVE_FOLLOWER_SUCCESS';
+export const REMOVE_FOLLOWER_FAILURE = 'user/REMOVE_FOLLOWER_FAILURE';
+
 export const ADD_POST_TO_ME = 'user/ADD_POST_TO_ME';
 export const ADD_POST_TO_ME_SUCCESS = 'user/ADD_POST_TO_ME_SUCCESS';
 export const ADD_POST_TO_ME_FAILURE = 'user/ADD_POST_TO_ME_FAILURE';
@@ -57,6 +61,7 @@ export const changeNickname = (nickname) => ({
 });
 export const follow = (data) => ({ type: FOLLOW, data });
 export const unfollow = (data) => ({ type: UNFOLLOW, data });
+export const removeFollower = (data) => ({ type: REMOVE_FOLLOWER, data });
 export const addPostToMe = (id) => ({ type: ADD_POST_TO_ME, id });
 export const removePostOfMe = (id) => ({ type: REMOVE_POST_OF_ME, id });
 export const loadFollowers = () => ({ type: LOAD_FOLLOWERS });
@@ -85,6 +90,9 @@ const initialState = {
   unfollowLoading: false,
   unfollowDone: false,
   unfollowError: null,
+  removeFollowerLoading: false,
+  removeFollowerDone: false,
+  removeFollowerError: null,
   addPostToMeLoading: false,
   addPostToMeDone: false,
   addPostToMeError: null,
@@ -208,6 +216,22 @@ const user = (state = initialState, action) =>
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
         draft.unfollowError = action.error;
+        break;
+      case REMOVE_FOLLOWER:
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerDone = false;
+        draft.removeFollowerError = null;
+        break;
+      case REMOVE_FOLLOWER_SUCCESS:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerDone = true;
+        draft.me.Followers = draft.me.Followers.filter(
+          (v) => v.id !== action.data.UserId
+        );
+        break;
+      case REMOVE_FOLLOWER_FAILURE:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerError = action.error;
         break;
       case ADD_POST_TO_ME:
         draft.addPostToMeLoading = true;

@@ -17,6 +17,10 @@ export const followApi = (data) => axios.patch(`/user/${data}/follow`);
 // data: user id
 export const unfollowApi = (data) => axios.delete(`/user/${data}/follow`);
 
+// data: user id
+export const removeFollowerApi = (data) =>
+  axios.delete(`/user/follower/${data}`);
+
 export const loadFollowersApi = () => axios.get('/user/followers');
 
 export const loadFollowingsApi = () => axios.get('/user/followings');

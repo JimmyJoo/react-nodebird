@@ -9,6 +9,7 @@ import {
   unfollowApi,
   loadFollowersApi,
   loadFollowingsApi,
+  removeFollowerApi,
 } from '../api/userApi';
 import {
   LOG_IN,
@@ -38,6 +39,9 @@ import {
   LOAD_FOLLOWERS_FAILURE,
   LOAD_FOLLOWINGS_SUCCESS,
   LOAD_FOLLOWINGS_FAILURE,
+  REMOVE_FOLLOWER,
+  REMOVE_FOLLOWER_SUCCESS,
+  REMOVE_FOLLOWER_FAILURE,
 } from '../reducers/user';
 
 function* logIn(action) {
@@ -129,6 +133,22 @@ function* unfollow(action) {
   }
 }
 
+function* removeFollower(action) {
+  try {
+    const result = yield call(removeFollowerApi, action.data);
+    console.log('result: ', result);
+    yield put({
+      type: REMOVE_FOLLOWER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: REMOVE_FOLLOWER_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* changeNickname(action) {
   try {
     const result = yield call(changeNicknameApi, action.nickname);
@@ -144,10 +164,9 @@ function* changeNickname(action) {
   }
 }
 
-function* loadFollowers(action) {
+function* loadFollowers() {
   try {
     const result = yield call(loadFollowersApi);
-    console.log('result1: ', result);
     yield put({
       type: LOAD_FOLLOWERS_SUCCESS,
       data: result.data,
@@ -160,10 +179,9 @@ function* loadFollowers(action) {
   }
 }
 
-function* loadFollowings(action) {
+function* loadFollowings() {
   try {
     const result = yield call(loadFollowingsApi);
-    console.log('result2: ', result);
     yield put({
       type: LOAD_FOLLOWINGS_SUCCESS,
       data: result.data,
@@ -200,6 +218,10 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW, unfollow);
 }
 
+function* watchRemoveFollower() {
+  yield takeLatest(REMOVE_FOLLOWER, removeFollower);
+}
+
 function* watchChangeNickname() {
   yield takeLatest(CHANGE_NICKNAME, changeNickname);
 }
@@ -223,5 +245,6 @@ export default function* userSaga() {
     fork(watchChangeNickname),
     fork(watchLoadFollowers),
     fork(watchLoadFollowings),
+    fork(watchRemoveFollower),
   ]);
 }
