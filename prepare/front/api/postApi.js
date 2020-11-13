@@ -4,6 +4,8 @@ export const loadPostsApi = () => axios.get('/posts');
 
 export const addPostApi = (data) => axios.post('/post', { content: data });
 
+export const removePostApi = (id) => axios.delete(`/post/${id}`);
+
 export const addCommentApi = (data) =>
   axios.post(`/post/${data.postId}/comment`, data);
 

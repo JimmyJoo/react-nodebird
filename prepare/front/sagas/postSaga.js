@@ -1,18 +1,11 @@
-import {
-  all,
-  fork,
-  takeLatest,
-  delay,
-  put,
-  call,
-  throttle,
-} from 'redux-saga/effects';
+import { all, fork, takeLatest, put, call } from 'redux-saga/effects';
 import {
   addPostApi,
   addCommentApi,
   loadPostsApi,
   likePostApi,
   unlikePostApi,
+  removePostApi,
 } from '../api/postApi';
 import {
   LOAD_POSTS,
@@ -81,14 +74,14 @@ function* addPost(action) {
 
 function* removePost(action) {
   try {
-    yield delay(1000);
+    const result = yield call(removePostApi, action.id);
     yield put({
       type: REMOVE_POST_SUCCESS,
-      id: action.id,
+      PostId: result.data.PostId,
     });
     yield put({
       type: REMOVE_POST_OF_ME_SUCCESS,
-      id: action.id,
+      PostId: result.data.PostId,
     });
   } catch (err) {
     yield put({
@@ -119,7 +112,7 @@ function* addComment(action) {
 
 function* likePost(action) {
   try {
-    const result = yield call(likePostApi, action.data);
+    const result = yield call(likePostApi, action.id);
     yield put({
       type: LIKE_POST_SUCCESS,
       data: result.data,
