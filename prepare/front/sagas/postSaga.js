@@ -6,6 +6,7 @@ import {
   likePostApi,
   unlikePostApi,
   removePostApi,
+  uploadImagesApi,
 } from '../api/postApi';
 import {
   LOAD_POSTS,
@@ -26,6 +27,9 @@ import {
   UNLIKE_POST,
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_SUCCESS,
+  UPLOAD_IMAGES,
+  UPLOAD_IMAGES_FAILURE,
+  UPLOAD_IMAGES_SUCCESS,
 } from '../reducers/post';
 import {
   ADD_POST_TO_ME_SUCCESS,
@@ -140,6 +144,21 @@ function* unlikePost(action) {
   }
 }
 
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesApi, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLoadPosts() {
   yield takeLatest(LOAD_POSTS, loadPosts);
 }
@@ -164,6 +183,10 @@ function* watchUnlikePost() {
   yield takeLatest(UNLIKE_POST, unlikePost);
 }
 
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES, uploadImages);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchLoadPosts),
@@ -172,5 +195,6 @@ export default function* postSaga() {
     fork(watchAddComment),
     fork(watchLikePost),
     fork(watchUnlikePost),
+    fork(watchUploadImages),
   ]);
 }

@@ -25,6 +25,10 @@ export const UNLIKE_POST = 'post/UNLIKE_POST';
 export const UNLIKE_POST_SUCCESS = 'post/UNLIKE_POST_SUCCESS';
 export const UNLIKE_POST_FAILURE = 'post/UNLIKE_POST_FAILURE';
 
+export const UPLOAD_IMAGES = 'post/UPLOAD_IMAGES';
+export const UPLOAD_IMAGES_SUCCESS = 'post/UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'post/UPLOAD_IMAGES_FAILURE';
+
 // action creator
 export const loadPosts = () => ({ type: LOAD_POSTS });
 export const addPost = (data) => ({ type: ADD_POST, data });
@@ -32,6 +36,7 @@ export const removePost = (id) => ({ type: REMOVE_POST, id });
 export const addComment = (data) => ({ type: ADD_COMMENT, data });
 export const likePost = (id) => ({ type: LIKE_POST, data: id });
 export const unlikePost = (id) => ({ type: UNLIKE_POST, data: id });
+export const uploadImages = (data) => ({ type: UPLOAD_IMAGES, data });
 
 // initialState
 const initialState = {
@@ -56,6 +61,9 @@ const initialState = {
   unlikePostLoading: false,
   unlikePostDone: false,
   unlikePostError: null,
+  uploadImagesLoading: false,
+  uploadImagesDone: false,
+  uploadImagesError: null,
 };
 
 // reducer
@@ -157,6 +165,20 @@ const post = (state = initialState, action) =>
       case UNLIKE_POST_FAILURE:
         draft.unlikePostLoading = false;
         draft.unlikePostError = action.error;
+        break;
+      case UPLOAD_IMAGES:
+        draft.uploadImagesLoading = true;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = null;
+        break;
+      case UPLOAD_IMAGES_SUCCESS:
+        draft.imagePaths = action.data;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = true;
+        break;
+      case UPLOAD_IMAGES_FAILURE:
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesError = action.error;
         break;
       default:
         return state;

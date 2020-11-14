@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPost } from '../reducers/post';
+import { addPost, uploadImages } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 const PostForm = () => {
@@ -17,6 +17,14 @@ const PostForm = () => {
   const onClickUploadImage = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+
+  const onChangeImages = useCallback((e) => {
+    const imageFormData = new FormData();
+    [...e.target.files].forEach((file) => {
+      imageFormData.append('image', file);
+    });
+    dispatch(uploadImages(imageFormData));
+  }, []);
 
   useEffect(() => {
     if (addPostDone) {
@@ -38,7 +46,14 @@ const PostForm = () => {
       />
 
       <div>
-        <input type="file" multiple hidden ref={imageInput} />
+        <input
+          type="file"
+          name="image"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={onChangeImages}
+        />
         <Button onClick={onClickUploadImage}>이미지 업로드</Button>
         <Button type="primary" style={{ float: 'right' }} htmlType="submit">
           짹짹
