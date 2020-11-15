@@ -5,12 +5,14 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
 const postsRouter = require('./routers/posts');
 const postRouter = require('./routers/post');
 const userRouter = require('./routers/user');
 
 const db = require('./models');
 const passportConfig = require('./passport');
+const { static } = require('express');
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use(
     credentials: true, // to share cookie between diff domains
   })
 );
+app.use('/', static(path.join(__dirname, 'uploads')));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
