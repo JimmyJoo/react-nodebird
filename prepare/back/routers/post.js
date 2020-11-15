@@ -132,7 +132,7 @@ const upload = multer({
       // 지미주.png
       const ext = path.extname(file.originalname); // 확장자(.png) 추출
       const basename = path.basename(file.originalname, ext); // 지미주
-      done(null, basename + new Date().getTime() + ext);
+      done(null, basename + '_' + new Date().getTime() + ext);
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 },

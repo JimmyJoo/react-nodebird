@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPost, uploadImages } from '../reducers/post';
+import { addPost, uploadImages, removeImage } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 const PostForm = () => {
@@ -25,6 +25,13 @@ const PostForm = () => {
     });
     dispatch(uploadImages(imageFormData));
   }, []);
+
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch(removeImage(index));
+    },
+    []
+  );
 
   useEffect(() => {
     if (addPostDone) {
@@ -60,11 +67,15 @@ const PostForm = () => {
         </Button>
       </div>
       <div>
-        {imagePaths.map((image) => (
-          <div key={image} style={{ display: 'inline-block' }}>
-            <img src={image} style={{ width: '200px' }} alt={image} />
+        {imagePaths.map((imageSrc, i) => (
+          <div key={imageSrc} style={{ display: 'inline-block' }}>
+            <img
+              src={`http://localhost:3065/${imageSrc}`}
+              style={{ width: '200px' }}
+              alt={imageSrc}
+            />
             <div>
-              <Button>제거</Button>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
           </div>
         ))}

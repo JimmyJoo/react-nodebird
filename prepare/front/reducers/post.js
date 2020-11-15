@@ -29,6 +29,8 @@ export const UPLOAD_IMAGES = 'post/UPLOAD_IMAGES';
 export const UPLOAD_IMAGES_SUCCESS = 'post/UPLOAD_IMAGES_SUCCESS';
 export const UPLOAD_IMAGES_FAILURE = 'post/UPLOAD_IMAGES_FAILURE';
 
+export const REMOVE_IMAGE = 'post/REMOVE_IMAGE';
+
 // action creator
 export const loadPosts = () => ({ type: LOAD_POSTS });
 export const addPost = (data) => ({ type: ADD_POST, data });
@@ -37,6 +39,7 @@ export const addComment = (data) => ({ type: ADD_COMMENT, data });
 export const likePost = (id) => ({ type: LIKE_POST, data: id });
 export const unlikePost = (id) => ({ type: UNLIKE_POST, data: id });
 export const uploadImages = (data) => ({ type: UPLOAD_IMAGES, data });
+export const removeImage = (data) => ({ type: REMOVE_IMAGE, data });
 
 // initialState
 const initialState = {
@@ -179,6 +182,10 @@ const post = (state = initialState, action) =>
       case UPLOAD_IMAGES_FAILURE:
         draft.uploadImagesLoading = false;
         draft.uploadImagesError = action.error;
+        break;
+      case REMOVE_IMAGE:
+        console.log(action.data);
+        draft.imagePaths = draft.imagePaths.filter((_, i) => i !== action.data);
         break;
       default:
         return state;
