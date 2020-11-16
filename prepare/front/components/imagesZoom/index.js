@@ -25,7 +25,6 @@ const imagesZoom = ({ images, onClose }) => {
           <Slick
             initialSlide={0}
             beforeChange={(slide) => {
-              console.log(slide);
               setCurrentSlide(slide);
             }}
             infinite
@@ -35,7 +34,7 @@ const imagesZoom = ({ images, onClose }) => {
           >
             {images.map(({ src }) => (
               <ImgWrapper key={src}>
-                <img src={src} alt={src} />
+                <img src={`http://localhost:3065/${src}`} alt={src} />
               </ImgWrapper>
             ))}
           </Slick>

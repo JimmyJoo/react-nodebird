@@ -11,8 +11,16 @@ const PostForm = () => {
   const [text, setText, onChangeText] = useInput('');
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
-  }, [text]);
+    if (!text || !text.trim()) {
+      return alert('게시글을 작성하세요.');
+    }
+    const formData = new FormData();
+    imagePaths.forEach((imagePath) => {
+      formData.append('image', imagePath);
+    });
+    formData.append('content', text);
+    return dispatch(addPost(formData));
+  }, [text, imagePaths]);
 
   const onClickUploadImage = useCallback(() => {
     imageInput.current.click();
@@ -24,7 +32,7 @@ const PostForm = () => {
       imageFormData.append('image', file);
     });
     dispatch(uploadImages(imageFormData));
-  }, []);
+  });
 
   const onRemoveImage = useCallback(
     (index) => () => {

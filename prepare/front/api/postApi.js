@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const loadPostsApi = () => axios.get('/posts');
 
-export const addPostApi = (data) => axios.post('/post', { content: data });
+export const addPostApi = (data) => axios.post('/post', data);
 
 export const removePostApi = (id) => axios.delete(`/post/${id}`);
 

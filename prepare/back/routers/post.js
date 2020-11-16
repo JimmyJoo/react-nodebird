@@ -15,12 +15,42 @@ try {
   fs.mkdirSync('uploads');
 }
 
-router.post('/', isLoggedIn, async (req, res, next) => {
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // 지미주.png
+      const ext = path.extname(file.originalname); // 확장자(.png) 추출
+      const basename = path.basename(file.originalname, ext); // 지미주
+      done(null, basename + '_' + new Date().getTime() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    console.log('req.body: ', req.body);
+    console.log('req.body.content: ', req.body.content);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        //이미지 여러개 올리면 image: [지미.png, 주.png]
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      } else {
+        // 이미지 하나만 올리면 image: [지미.png]
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -48,8 +78,6 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
-
-router.delete('/', (req, res) => {});
 
 router.post(`/:postId/comment`, isLoggedIn, async (req, res, next) => {
   try {
@@ -123,20 +151,6 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
   }
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, 'uploads');
-    },
-    filename(req, file, done) {
-      // 지미주.png
-      const ext = path.extname(file.originalname); // 확장자(.png) 추출
-      const basename = path.basename(file.originalname, ext); // 지미주
-      done(null, basename + '_' + new Date().getTime() + ext);
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 },
-});
 router.post(
   '/images',
   isLoggedIn,
